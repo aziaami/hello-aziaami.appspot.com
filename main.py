@@ -14,39 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import os
 import webapp2
+import jinja2
 import cgi
 
 from unit2.rot13 import *
+from unit2.jinja_test import *
 
-page = """ 
-aziaami search engine
-<form action="http://www.google.com/search">
-	<label> Google: <input name="q"> </label>
-	<input type="submit">
-</form>
-<br> 
-Print out request...
-<form method="post" action="/testForm">
-	<label> username: <input type="text" name="u"> 		</label>
-	<label> password: <input type="password" name="q"> 	</label>
-	<input type="submit">
-</form>
-<br>
-What is your birthday ?
-<form method="post">
-	<label> Day   <input type="text" name="day" value="%(d)s">   </label>
-	<label> Month <input type="text" name="month" value="%(m)s"> </label>
-	<label> Year  <input type="text" name="year" value="%(y)s">  </label>
-    <div style="color:red"> %(error)s </div>
-	<br>
-	<input type="submit">
-</form>
-<br>
-<p>
-Go to a page where you can <a href="/unit2/rot13">Rot13</a> your text.
-</p>
-"""
 
 months = ['January',
           'February',
@@ -84,13 +59,33 @@ def escape_html(s):
     return cgi.escape(s, quote=True)
 
 
+jinja_env = jinja2.Environment(
+                autoescape = True,
+                loader = jinja2.FileSystemLoader(
+                                    os.path.join(
+                                        os.path.dirname(__file__),
+                                        'templates')
+                                    )
+                )
+
 class MainHandler(webapp2.RequestHandler):
     def write_page(self, error="", d="", m="", y=""):
-        self.response.out.write(page % {"error":error, "d":d, "m":m, "y":y})
+        
+        template_values = {
+            "error":error, 
+            "d":d, 
+            "m":m, 
+            "y":y }
+
+        template = jinja_env.get_template('index.html')
+
+        self.response.out.write(template.render(template_values))
+
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
         self.write_page()
+
 
     def post(self):
         d= self.request.get('day')
@@ -130,5 +125,6 @@ app = webapp2.WSGIApplication([
     			('/',               MainHandler), 
     			('/testForm',       TestHandler),
                 ('/thanks',         ThanksHandler),
-                ('/unit2/rot13',    Rot13Handler)
+                ('/unit2/rot13',    Rot13Handler),
+                ('/unit2/jinja_test', JinjaTestHandler)
 	  ], debug=True)

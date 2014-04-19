@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+	<head>
+		<title> Home Page</title>
+	</head>
+	<body>
+		aziaami search engine
+		<form action="http://www.google.com/search">
+			<label> Google: <input name="q"> </label>
+			<input type="submit">
+		</form>
+		<br> 
+		Print out request...
+		<form method="post" action="/testForm">
+			<label> username: <input type="text" name="u"> 		</label>
+			<label> password: <input type="password" name="q"> 	</label>
+			<input type="submit">
+		</form>
+		<br>
+		What is your birthday ?
+		<form method="post">
+			<label> Day   <input type="text" name="day"   value="{{d}}">  </label>
+			<label> Month <input type="text" name="month" value="{{m}}">  </label>
+			<label> Year  <input type="text" name="year"  value="{{y}}">  </label>
+		    <div style="color:red"> {{error}} </div>
+			<br>
+			<input type="submit">
+		</form>
+		<br>		
+		<a href="/unit2/rot13">Rot13 page</a>		
+		<br>
+		<a href="/unit2/jinja_test">Jinja test page</a>		
+	</body>
+</html>
