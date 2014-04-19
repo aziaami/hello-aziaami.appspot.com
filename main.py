@@ -17,7 +17,7 @@
 import webapp2
 import cgi
 
-from rot13 import *
+from unit2.rot13 import *
 
 page = """ 
 aziaami search engine
@@ -44,7 +44,7 @@ What is your birthday ?
 </form>
 <br>
 <p>
-Go to a page where you can <a href="/rot13">Rot13</a> your text.
+Go to a page where you can <a href="/unit2/rot13">Rot13</a> your text.
 </p>
 """
 
@@ -127,8 +127,8 @@ class ThanksHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    			('/',         MainHandler), 
-    			('/testForm', TestHandler),
-                ('/thanks',   ThanksHandler),
-                ('/rot13',    Rot13Handler)
+    			('/',               MainHandler), 
+    			('/testForm',       TestHandler),
+                ('/thanks',         ThanksHandler),
+                ('/unit2/rot13',    Rot13Handler)
 	  ], debug=True)
