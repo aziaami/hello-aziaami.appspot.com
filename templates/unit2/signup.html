@@ -1,0 +1,40 @@
+<!-- 
+Signup Form 
+by Aamir Aziz
+April 2014
+-->
+
+<!doctype html>
+<html>
+	<head>
+		<title> Signup </title>
+	</head>
+	<body>
+		<form method="post">
+			<h2> Signup </h2>
+            <table>
+                <tr>
+                  <td class="label">Username</td>
+                  <td><input type="text" name="username" value="{{username}}"></td>
+                  <td class="error" style="color:red"> {{username_error}} </td>
+                </tr>
+                <tr>
+                  <td class="label">Password</td>
+                  <td><input type="password" name="password" value=""></td>
+                  <td class="error" style="color:red"> {{password_error}} </td>
+                </tr>
+                <tr>
+                  <td class="label">Verify Password</td>
+                  <td><input type="password" name="password2" value=""></td>
+                  <td class="error" style="color:red"> {{password2_error}} </td>
+                </tr>
+                <tr>
+                  <td class="label">Email (optional)</td>
+                  <td><input type="text" name="email" value="{{email}}"></td>
+                  <td class="error" style="color:red"> {{email_error}} </td>
+                </tr>                
+            </table>
+            <input type="submit">
+		</form>
+	</body>
+</html>

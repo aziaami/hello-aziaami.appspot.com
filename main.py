@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# editied by Aamir Aziz
+# April 2014
+
 import os
 import webapp2
 import jinja2
@@ -21,7 +24,8 @@ import cgi
 
 from unit2.rot13 import *
 from unit2.jinja_test import *
-
+from unit2.signup import *
+from unit2.welcome import *
 
 months = ['January',
           'February',
@@ -116,9 +120,11 @@ class TestHandler(webapp2.RequestHandler):
         self.response.out.write(self.request)
 
 
+
 class ThanksHandler(webapp2.RequestHandler):
     def get(self):
         self.response.out.write("Thanks! Happy Birthday!")
+
 
 
 app = webapp2.WSGIApplication([
@@ -126,5 +132,7 @@ app = webapp2.WSGIApplication([
     			('/testForm',       TestHandler),
                 ('/thanks',         ThanksHandler),
                 ('/unit2/rot13',    Rot13Handler),
-                ('/unit2/jinja_test', JinjaTestHandler)
+                ('/unit2/jinja_test', JinjaTestHandler),
+                ('/unit2/signup',   SignupHandler),
+                ('/unit2/welcome',  WelcomeHandler)
 	  ], debug=True)
