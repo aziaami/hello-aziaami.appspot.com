@@ -17,122 +17,67 @@
 # editied by Aamir Aziz
 # April 2014
 
-import os
-import webapp2
-import jinja2
+from src.BaseHandler import *
+
+from src.utils import dateVal
+
+from src.unit2.rot13 import *
+from src.unit2.jinja_test import *
+from src.unit2.signup import *
+from src.unit2.welcome import *
+
+from src.blog.blogHandler import *
+
 import cgi
 
-from unit2.rot13 import *
-from unit2.jinja_test import *
-from unit2.signup import *
-from unit2.welcome import *
-
-months = ['January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December']
-
-def validate_day(day):
-    if day and day.isdigit():
-        day = int(day)
-        if day in range(1,31):
-            return day
-
-def validate_month(month):
-    if month:
-        month = month.lower()
-        month = month[0].upper() + month[1:]
-        if (month in months):
-            return month
-        
-def validate_year(year):
-    if year and year.isdigit():
-        year = int(year)
-        if year in range(1900,2014):
-            return year
-
 def escape_html(s):
-    return cgi.escape(s, quote=True)
+    return cgi.escape(s)
 
-
-jinja_env = jinja2.Environment(
-                autoescape = True,
-                loader = jinja2.FileSystemLoader(
-                                    os.path.join(
-                                        os.path.dirname(__file__),
-                                        'templates')
-                                    )
-                )
-
-class MainHandler(webapp2.RequestHandler):
-    def write_page(self, error="", d="", m="", y=""):
-        
-        template_values = {
-            "error":error, 
-            "d":d, 
-            "m":m, 
-            "y":y }
-
-        template = jinja_env.get_template('index.html')
-
-        self.response.out.write(template.render(template_values))
-
+class MainHandler(BaseHandlerClass):
+    def mainTemplate(self):
+        return 'index.html'
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-        self.write_page()
-
+        self.render(self.mainTemplate())
 
     def post(self):
-        d= self.request.get('day')
-        m= self.request.get('month')
-        y= self.request.get('year')
+        d= escape_html(self.request.get('day'))
+        m= escape_html(self.request.get('month'))
+        y= escape_html(self.request.get('year'))
 
-        validDay   = validate_day(d)
-        validMonth = validate_month(m)
-        validYear  = validate_year(y)
-
-        if validDay and validMonth and validYear:
+        if dateVal.valid_day(d) and dateVal.valid_month(m) and dateVal.valid_year(y):
             self.redirect('/thanks')
         else:
-            self.write_page(
-                "Incorrect. Please try again", 
-                escape_html(d),
-                escape_html(m), 
-                escape_html(y))
+            error = "Incorrect. Please try again"
+            self.render(self.mainTemplate(), error=error, d=d, m=m, y=y)
 
 
-class TestHandler(webapp2.RequestHandler):
+
+class ThanksHandler(BaseHandlerClass):
+    def get(self):
+        self.write("Thanks! Happy Birthday!")
+
+
+
+class TestHandler(BaseHandlerClass):
     def get(self):
         q = self.request.get('q')
-        self.response.out.write(q)
+        self.write(q)
     
     def post(self):
         self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write(self.request)
-
-
-
-class ThanksHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.out.write("Thanks! Happy Birthday!")
+        self.write(self.request)
 
 
 
 app = webapp2.WSGIApplication([
-    			('/',               MainHandler), 
-    			('/testForm',       TestHandler),
-                ('/thanks',         ThanksHandler),
-                ('/unit2/rot13',    Rot13Handler),
+                ('/',                 MainHandler), 
+                ('/testForm',         TestHandler),
+                ('/thanks',           ThanksHandler),
+                ('/unit2/rot13',      Rot13Handler),
                 ('/unit2/jinja_test', JinjaTestHandler),
-                ('/unit2/signup',   SignupHandler),
-                ('/unit2/welcome',  WelcomeHandler)
-	  ], debug=True)
+                ('/unit2/signup',     SignupHandler),
+                ('/unit2/welcome',    WelcomeHandler),
+                ('/blog',             BlogHandler)
+      ], debug=True)
