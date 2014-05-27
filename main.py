@@ -26,9 +26,10 @@ from src.unit2.jinja_test import *
 from src.unit2.signup import *
 from src.unit2.welcome import *
 
+from src.blog.blogFrontHandler import *
 from src.blog.blogHandler import *
 
-import cgi
+import cgi 
 
 def escape_html(s):
     return cgi.escape(s)
@@ -79,5 +80,6 @@ app = webapp2.WSGIApplication([
                 ('/unit2/jinja_test', JinjaTestHandler),
                 ('/unit2/signup',     SignupHandler),
                 ('/unit2/welcome',    WelcomeHandler),
-                ('/blog',             BlogHandler)
+                ('/blog',             BlogFrontHandler), 
+                ('/blog/newpost',     BlogHandler)
       ], debug=True)
